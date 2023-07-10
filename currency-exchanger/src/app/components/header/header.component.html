@@ -1,1 +1,17 @@
-<p>header works!</p>
+<div class="flex flex-row max-w-7xl mx-auto items-center justify-around overflow-hidden bg-rose-900 p-4 rounded-b-lg">
+  <div>
+    <h1 class="text-3xl">Currency<span>Changer</span></h1>
+  </div>
+  <div>
+  </div>
+  <div *ngIf="currencies$ | async as currencies" class="flex flex-row flex-wrap">
+    <div *ngFor="let item of currencies" class="px-2 text-center">
+      <div class="">
+        <h1>1 {{item.cc}}</h1>
+        <h1>=</h1>
+        <h1>{{item.rate}} UAH</h1>
+
+      </div>
+    </div>
+  </div>
+</div>
