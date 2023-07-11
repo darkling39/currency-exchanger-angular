@@ -1,1 +1,30 @@
-<p>exchanger works!</p>
+<form [formGroup]="firstFormGroup"
+  class="max-w-7xl mx-auto bg-rose-900 mt-40 rounded-lg flex flex-row gap-4 px-7 py-20 justify-center">
+  <mat-form-field>
+    <mat-label>Currencies</mat-label>
+    <mat-select formControlName="lCurrency">
+      <mat-option *ngFor="let item of currencies$ | async" [value]="item">
+        {{item.cc}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Value</mat-label>
+    <input type="number" matInput formControlName="lValue">
+  </mat-form-field>
+
+  <h1 class="text-3xl p-4 text-center">=</h1>
+
+  <mat-form-field>
+    <mat-label>Currencies</mat-label>
+    <mat-select formControlName="rCurrency">
+      <mat-option *ngFor="let item of currencies$ | async" [value]="item">
+        {{item.cc}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Value</mat-label>
+    <input type="number" matInput formControlName="rValue">
+  </mat-form-field>
+</form>

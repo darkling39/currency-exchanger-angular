@@ -4,5 +4,16 @@
 
 
 
-html, body { height: 100%; font-weight: 200; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body { height: 100%; font-weight: 200 !important; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif !important; }
+/* .cdk-overlay-connected-position-bounding-box{
+  height: 100% !important ;
+  max-width: 80rem !important;
+  position: relative !important;
+  margin: auto !important;
+  padding-left: 1rem !important;
+} */
+.mat-mdc-form-field .mat-mdc-floating-label.mdc-floating-label{
+  line-height: 1.5 !important;
+
+}
