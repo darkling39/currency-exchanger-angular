@@ -13,6 +13,10 @@ export class HeaderComponent {
   currencies$: Observable<ICurrency[]> = this.apiService.getAll().pipe(
     map((data) => {
       return data.filter((filt) => filt.r030 === 840 || filt.r030 === 978);
+    }),
+    map((data) => {
+      data.map((e) => e.rate.toFixed(2));
+      return data;
     })
   );
   ngOnInit() {}

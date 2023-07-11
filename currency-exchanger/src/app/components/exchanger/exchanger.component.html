@@ -17,7 +17,7 @@
 
   <mat-form-field>
     <mat-label>Currencies</mat-label>
-    <mat-select formControlName="rCurrency">
+    <mat-select formControlName="rCurrency" >
       <mat-option *ngFor="let item of currencies$ | async" [value]="item">
         {{item.cc}}
       </mat-option>
@@ -25,6 +25,6 @@
   </mat-form-field>
   <mat-form-field>
     <mat-label>Value</mat-label>
-    <input type="number" matInput formControlName="rValue">
+    <input type="number" matInput formControlName="rValue" >
   </mat-form-field>
 </form>

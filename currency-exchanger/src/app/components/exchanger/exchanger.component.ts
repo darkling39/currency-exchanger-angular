@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, map, startWith } from 'rxjs';
 import { ICurrency } from 'src/app/models/currency';
@@ -17,10 +17,7 @@ export class ExchangerComponent {
   ) {}
 
   currencies$: Observable<ICurrency[]> = this.apiService.getAll();
-  lValue: number;
-  rValue: number;
   firstFormGroup!: FormGroup;
-
   myControl = new FormControl('');
 
   ngOnInit() {
@@ -37,49 +34,53 @@ export class ExchangerComponent {
       ]),
     });
     this.toStorage('lCurrency');
-    this.toStorage('rCurrency');
-    this.exchange();
 
-    // this.firstFormGroup
-    //   .get('rValue')
-    //   ?.valueChanges.subscribe((change) =>
-    //     this.firstFormGroup
-    //       .get('lValue')
-    //       ?.setValue(
-    //         (
-    //           change *
-    //           (this.storage.rightCurrency.rate / this.storage.leftCurrency.rate)
-    //         ).toFixed(3)
-    //       )
-    //   );
-    // this.firstFormGroup
-    //   .get('rValue')
-    //   ?.valueChanges.subscribe((change) =>
-    //     this.firstFormGroup.get('lValue')?.setValue(change)
-    //   );
+    this.toStorage('rCurrency');
+
+    this.exchange('lValue');
+    this.exchange('rValue');
   }
-  toStorage(value: string) {
-    this.firstFormGroup.get(value)?.valueChanges.subscribe((change) => {
-      if (value === 'lCurrency') this.storage.leftCurrency = change;
-      else this.storage.rightCurrency = change;
+  toStorage(curr: string) {
+    this.firstFormGroup.get(curr)?.valueChanges.subscribe((change) => {
+      if (curr === 'lCurrency') {
+        this.storage.leftCurrency = change;
+      } else {
+        this.storage.rightCurrency = change;
+      }
       if (this.storage.leftCurrency && this.storage.rightCurrency) {
         this.firstFormGroup.get('lValue')?.enable();
         this.firstFormGroup.get('rValue')?.enable();
       }
     });
   }
-  exchange() {
-    this.firstFormGroup
-      .get('lValue')
-      ?.valueChanges.subscribe((change) =>
+
+  exchange(val: string) {
+    if (val === 'lValue') {
+      this.firstFormGroup.get(val)?.valueChanges.subscribe((change) => {
         this.firstFormGroup
           .get('rValue')
           ?.setValue(
             (
               change *
               (this.storage.leftCurrency.rate / this.storage.rightCurrency.rate)
-            ).toFixed(2)
-          )
-      );
+            ).toFixed(2),
+            { emitEvent: false }
+          );
+        return;
+      });
+    } else {
+      this.firstFormGroup.get(val)?.valueChanges.subscribe((change) => {
+        this.firstFormGroup
+          .get('lValue')
+          ?.setValue(
+            (
+              change *
+              (this.storage.rightCurrency.rate / this.storage.leftCurrency.rate)
+            ).toFixed(2),
+            { emitEvent: false }
+          );
+        return;
+      });
+    }
   }
 }
