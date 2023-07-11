@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable, map, startWith } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ICurrency } from 'src/app/models/currency';
 import { ApiService } from 'src/app/services/api.service';
 import { StorageService } from 'src/app/services/storage.service';
@@ -21,6 +21,15 @@ export class ExchangerComponent {
   myControl = new FormControl('');
 
   ngOnInit() {
+    this.createForm();
+
+    this.toStorage('lCurrency');
+    this.toStorage('rCurrency');
+
+    this.exchange('lValue');
+    this.exchange('rValue');
+  }
+  createForm() {
     this.firstFormGroup = new FormGroup({
       lCurrency: new FormControl(''),
       lValue: new FormControl({ value: 1, disabled: true }, [
@@ -33,13 +42,8 @@ export class ExchangerComponent {
         Validators.pattern(/^\d+(\.\d+)*$/),
       ]),
     });
-    this.toStorage('lCurrency');
-
-    this.toStorage('rCurrency');
-
-    this.exchange('lValue');
-    this.exchange('rValue');
   }
+
   toStorage(curr: string) {
     this.firstFormGroup.get(curr)?.valueChanges.subscribe((change) => {
       if (curr === 'lCurrency') {
@@ -66,7 +70,6 @@ export class ExchangerComponent {
             ).toFixed(2),
             { emitEvent: false }
           );
-        return;
       });
     } else {
       this.firstFormGroup.get(val)?.valueChanges.subscribe((change) => {
@@ -79,7 +82,6 @@ export class ExchangerComponent {
             ).toFixed(2),
             { emitEvent: false }
           );
-        return;
       });
     }
   }
