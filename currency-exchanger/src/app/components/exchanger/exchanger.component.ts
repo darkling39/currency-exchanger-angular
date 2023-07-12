@@ -5,6 +5,15 @@ import { ICurrency } from 'src/app/models/currency';
 import { ApiService } from 'src/app/services/api.service';
 import { StorageService } from 'src/app/services/storage.service';
 
+export enum currencyTypes {
+  LEFT = 'lCurrency',
+  RIGHT = 'rCurrency',
+}
+export enum valueTypes {
+  LEFT = 'lValue',
+  RIGHT = 'rValue',
+}
+
 @Component({
   selector: 'app-exchanger',
   templateUrl: './exchanger.component.html',
@@ -17,17 +26,25 @@ export class ExchangerComponent {
   ) {}
 
   currencies$: Observable<ICurrency[]> = this.apiService.getAll();
+
   firstFormGroup!: FormGroup;
+
   myControl = new FormControl('');
 
   ngOnInit() {
     this.createForm();
+    this.runStorage();
+    this.runExchange();
+  }
 
-    this.toStorage('lCurrency');
-    this.toStorage('rCurrency');
+  runStorage() {
+    this.toStorage(currencyTypes.LEFT);
+    this.toStorage(currencyTypes.RIGHT);
+  }
 
-    this.exchange('lValue');
-    this.exchange('rValue');
+  runExchange() {
+    this.exchange(valueTypes.LEFT);
+    this.exchange(valueTypes.RIGHT);
   }
   createForm() {
     this.firstFormGroup = new FormGroup({
@@ -46,23 +63,23 @@ export class ExchangerComponent {
 
   toStorage(curr: string) {
     this.firstFormGroup.get(curr)?.valueChanges.subscribe((change) => {
-      if (curr === 'lCurrency') {
+      if (curr === currencyTypes.LEFT) {
         this.storage.leftCurrency = change;
       } else {
         this.storage.rightCurrency = change;
       }
       if (this.storage.leftCurrency && this.storage.rightCurrency) {
-        this.firstFormGroup.get('lValue')?.enable();
-        this.firstFormGroup.get('rValue')?.enable();
+        this.firstFormGroup.get(valueTypes.LEFT)?.enable();
+        this.firstFormGroup.get(valueTypes.RIGHT)?.enable();
       }
     });
   }
 
   exchange(val: string) {
-    if (val === 'lValue') {
+    if (val === valueTypes.LEFT) {
       this.firstFormGroup.get(val)?.valueChanges.subscribe((change) => {
         this.firstFormGroup
-          .get('rValue')
+          .get(valueTypes.RIGHT)
           ?.setValue(
             (
               change *
@@ -74,7 +91,7 @@ export class ExchangerComponent {
     } else {
       this.firstFormGroup.get(val)?.valueChanges.subscribe((change) => {
         this.firstFormGroup
-          .get('lValue')
+          .get(valueTypes.LEFT)
           ?.setValue(
             (
               change *
