@@ -4,6 +4,14 @@ import { Observable } from 'rxjs';
 import { ICurrency } from 'src/app/models/currency';
 import { ApiService } from 'src/app/services/api.service';
 import { StorageService } from 'src/app/services/storage.service';
+export enum currencyTypes {
+  LEFT = 'lCurrency',
+  RIGHT = 'rCurrency',
+}
+export enum valueTypes {
+  LEFT = 'lValue',
+  RIGHT = 'rValue',
+}
 
 @Component({
   selector: 'app-exchanger',
@@ -22,12 +30,18 @@ export class ExchangerComponent {
 
   ngOnInit() {
     this.createForm();
+    this.runStorage();
+    this.runExchange();
+  }
 
-    this.toStorage('lCurrency');
-    this.toStorage('rCurrency');
+  runStorage() {
+    this.toStorage(currencyTypes.LEFT);
+    this.toStorage(currencyTypes.RIGHT);
+  }
 
-    this.exchange('lValue');
-    this.exchange('rValue');
+  runExchange() {
+    this.exchange(valueTypes.LEFT);
+    this.exchange(valueTypes.RIGHT);
   }
   createForm() {
     this.firstFormGroup = new FormGroup({
