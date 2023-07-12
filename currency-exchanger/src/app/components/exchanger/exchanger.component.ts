@@ -4,6 +4,14 @@ import { Observable } from 'rxjs';
 import { ICurrency } from 'src/app/models/currency';
 import { ApiService } from 'src/app/services/api.service';
 import { StorageService } from 'src/app/services/storage.service';
+export enum currencyTypes {
+  LEFT = 'lCurrency',
+  RIGHT = 'rCurrency',
+}
+export enum valueTypes {
+  LEFT = 'lValue',
+  RIGHT = 'rValue',
+}
 
 export enum currencyTypes {
   LEFT = 'lCurrency',
